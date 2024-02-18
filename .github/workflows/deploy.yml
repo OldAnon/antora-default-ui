@@ -1,7 +1,11 @@
-name: CI
+name: Release bundle
 
-on: [push, pull_request]
-
+on: 
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Version number of the release'
+        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,7 +26,19 @@ jobs:
       run: npx gulp bundle
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ui-bundle
         path: build/ui-bundle.zip
+
+    - name: Release Artifact
+      uses: softprops/action-gh-release@v1
+      id: boob
+      with: 
+        body: "Another release..."
+        tag_name: v${{  github.event.inputs.release_version  }}
+        draft: false
+        prerelease: false
+        files: build/sds-antora-ui-bundle/sds-antora-ui-bundle-${{ github.event.inputs.release_version }}.zip
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
