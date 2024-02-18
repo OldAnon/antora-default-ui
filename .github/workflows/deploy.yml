@@ -12,27 +12,13 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-  verify:
+  deploy:
     needs: setup
     runs-on: ubuntu-latest
     container:
       image: node:10.14.2-stretch
     steps:
     - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: npm install
-    - name: Lint
-      run: node_modules/.bin/gulp lint
-
-  deploy:
-    needs: verify
-    runs-on: ubuntu-latest
-    container:
-      image: node:10.14.2-stretch
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: npm install
     - name: Bundle
       run: node_modules/.bin/gulp bundle
     - name: Upload Artifact
