@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Bundle
-      run: node_modules/.bin/gulp bundle
+      run: npx gulp bundle
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
